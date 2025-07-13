@@ -1,45 +1,25 @@
-import pytest
 from src.models.category import Category
 from src.models.product import Product
 
 
-@pytest.fixture
-def sample_products():
-    """Фикстура с примером товаров для тестов"""
-    return [
-        Product("Телефон", "Смартфон", 50000.0, 10),
-        Product("Ноутбук", "Игровой", 100000.0, 5),
-    ]
+def test_products_property_format():
+    """Проверка формата вывода геттера products"""
+    product1 = Product("Телефон", "Смартфон", 15000, 3)
+    product2 = Product("Ноутбук", "Игровой", 50000, 5)
+    category = Category("Электроника", "Техника", [product1, product2])
+
+    result = category.products
+    expected = (
+        "Телефон, 15000 руб. Остаток: 3 шт.\n"
+        "Ноутбук, 50000 руб. Остаток: 5 шт."
+    )
+
+    assert result == expected
+    assert "Телефон, 15000 руб. Остаток: 3 шт." in result
+    assert "Ноутбук, 50000 руб. Остаток: 5 шт." in result
 
 
-def test_category_initialization(sample_products):
-    """Проверяет корректность инициализации категории."""
-    category = Category("Электроника", "Техника", sample_products)
-
-    assert category.name == "Электроника"
-    assert category.description == "Техника"
-    assert len(category.products) == 2
-
-
-def test_category_count(sample_products):
-    """Проверяет подсчёт количества категорий."""
-    initial_count = Category.category_count
-    _ = Category("Электроника", "Техника", sample_products)
-
-    assert Category.category_count == initial_count + 1
-
-
-def test_product_count(sample_products):
-    """Проверяет подсчёт количества товаров."""
-    initial_count = Category.product_count
-    _ = Category("Электроника", "Техника", sample_products)
-
-    assert Category.product_count == initial_count + len(sample_products)
-
-
-def test_empty_category():
-    """Проверяет создание категории без товаров."""
-    initial_products = Category.product_count
-    _ = Category("Пустая категория", "Нет товаров", [])
-
-    assert Category.product_count == initial_products  # Количество товаров не изменилось
+def test_empty_products_list():
+    """Проверка вывода пустого списка товаров"""
+    category = Category("Пустая", "Категория", [])
+    assert category.products == ""

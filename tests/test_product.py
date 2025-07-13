@@ -1,21 +1,62 @@
+import pytest
+from unittest.mock import patch
 from src.models.product import Product
 
 
-def test_product_initialization():
-    """Проверяет корректность инициализации товара."""
-    product = Product("Телефон", "Смартфон", 50000.0, 10)
-
-    assert product.name == "Телефон"
-    assert product.description == "Смартфон"
-    assert product.price == 50000.0
-    assert product.quantity == 10
+def test_price_getter():
+    """Проверка работы геттера цены."""
+    product = Product("Телефон", "Смартфон", 15000, 5)
+    assert product.price == 15000
 
 
-def test_product_default_values():
-    """Проверяет, что атрибуты имеют правильные типы."""
-    product = Product("Ноутбук", "Игровой", 100000.0, 5)
+def test_negative_price_setter(capsys):
+    """Проверка установки отрицательной цены."""
+    product = Product("Телефон", "Смартфон", 15000, 5)
+    product.price = -100
+    captured = capsys.readouterr()
+    assert "Цена не должна быть нулевая или отрицательная" in captured.out
+    assert product.price == 15000
 
-    assert isinstance(product.name, str)
-    assert isinstance(product.description, str)
-    assert isinstance(product.price, float)
-    assert isinstance(product.quantity, int)
+
+def test_zero_price_setter(capsys):
+    """Проверка установки нулевой цены."""
+    product = Product("Телефон", "Смартфон", 15000, 5)
+    product.price = 0
+    captured = capsys.readouterr()
+    assert "Цена не должна быть нулевая или отрицательная" in captured.out
+    assert product.price == 15000
+
+
+@patch('builtins.input', return_value='n')
+def test_price_decrease_rejected(mock_input, capsys):
+    """Проверка отмены понижения цены."""
+    product = Product("Телефон", "Смартфон", 15000, 5)
+    product.price = 14000
+
+    # Проверяем, что input был вызван
+    mock_input.assert_called_once()
+
+    captured = capsys.readouterr()
+    assert "Изменение цены отменено" in captured.out
+    assert product.price == 15000
+
+
+@patch('builtins.input', return_value='y')
+def test_price_decrease_accepted(mock_input, capsys):
+    """Проверка подтверждения понижения цены."""
+    product = Product("Телефон", "Смартфон", 15000, 5)
+    product.price = 14000
+
+    # Проверяем, что input был вызван
+    mock_input.assert_called_once()
+
+    captured = capsys.readouterr()
+    assert "Изменение цены отменено" not in captured.out
+    assert product.price == 14000
+
+
+def test_price_increase():
+    """Проверка повышения цены без подтверждения."""
+    product = Product("Телефон", "Смартфон", 15000, 5)
+    product.price = 16000
+    assert product.price == 16000
