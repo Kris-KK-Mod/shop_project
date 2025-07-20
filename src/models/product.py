@@ -1,24 +1,27 @@
 class Product:
-    """Класс для представления товара."""
-
     def __init__(self, name: str, description: str, price: float, quantity: int):
-        """
-        Инициализация товара.
-
-        :param name: Название товара
-        :param description: Описание товара
-        :param price: Цена товара
-        :param quantity: Количество товара
-        """
         self.name = name
         self.description = description
-        self.__price = price  # Приватный атрибут
+        self.__price = price
         self.quantity = quantity
+
+
+    def __add__(self, other):
+        """Сложение товаров по общей стоимости (цена * количество)"""
+        if not isinstance(other, Product):
+            raise TypeError("Можно складывать только объекты Product")
+        return (self.price * self.quantity) + (other.price * other.quantity)
+
+
+    def __str__(self):
+        return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
+
 
     @property
     def price(self):
         """Геттер для цены."""
         return self.__price
+
 
     @price.setter
     def price(self, new_price):

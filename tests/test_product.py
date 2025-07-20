@@ -60,3 +60,34 @@ def test_price_increase():
     product = Product("Телефон", "Смартфон", 15000, 5)
     product.price = 16000
     assert product.price == 16000
+
+
+def test_product_str():
+    product = Product("Телефон", "Смартфон", 15000, 5)
+    assert str(product) == "Телефон, 15000 руб. Остаток: 5 шт."
+
+
+def test_product_add():
+    p1 = Product("Товар1", "Описание", 100, 2)
+    p2 = Product("Товар2", "Описание", 200, 3)
+    assert p1 + p2 == 100*2 + 200*3
+
+
+def test_product_add_invalid_type():
+    p1 = Product("Товар", "Описание", 100, 1)
+    with pytest.raises(TypeError):
+        p1 + "не товар"
+
+
+def test_product_addition():
+    """Проверка сложения товаров"""
+    p1 = Product("Товар1", "Описание", 100, 10)
+    p2 = Product("Товар2", "Описание", 200, 2)
+    assert p1 + p2 == 1400  # 100*10 + 200*2
+
+
+def test_add_invalid_type():
+    """Проверка сложения с неправильным типом"""
+    p = Product("Товар", "Описание", 100, 1)
+    with pytest.raises(TypeError):
+        p + "не товар"

@@ -20,18 +20,24 @@ class Category:
         Category.product_count += len(products)
 
 
+    def __iter__(self):
+        """Возвращает итератор для перебора товаров категории"""
+        return iter(self.__products)  # Используем встроенный iter()
+
+
+    def __str__(self):
+        """Строковое представление категории"""
+        total_quantity = sum(product.quantity for product in self.__products)
+        return f"{self.name}, количество продуктов: {total_quantity} шт."
+
+
     @property
     def products(self):
         """
         Геттер для вывода списка товаров в заданном формате.
         Возвращает строку с перечислением товаров.
         """
-        products_list = []
-        for product in self.__products:
-            products_list.append(
-                f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт."
-            )
-        return "\n".join(products_list)
+        return "\n".join(str(product) for product in self.__products)
 
 
     def add_product(self, product):

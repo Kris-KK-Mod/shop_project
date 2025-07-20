@@ -1,18 +1,18 @@
 from src.models.product import Product
+from src.models.category import Category
 
 if __name__ == "__main__":
-    # Создаем товар
-    product = Product("Ноутбук", "Игровой", 50000, 3)
+    # Создаем товары
+    p1 = Product("iPhone", "128GB", 80000, 10)
+    p2 = Product("Galaxy", "256GB", 70000, 5)
 
-    # Проверяем геттер
-    print(f"Текущая цена: {product.price}")
+    # Демонстрация сложения
+    print(f"Общая стоимость: {p1 + p2} руб.")  # 80000*10 + 70000*5
 
-    # Пытаемся установить отрицательную цену
-    product.price = -100
+    # Создаем категорию
+    category = Category("Смартфоны", "Флагманы", [p1, p2])
 
-    # Пытаемся понизить цену
-    product.price = 45000
-
-    # Увеличиваем цену
-    product.price = 55000
-    print(f"Новая цена: {product.price}")
+    # Демонстрация итератора
+    print("\nТовары в категории:")
+    for product in category:
+        print(product)
