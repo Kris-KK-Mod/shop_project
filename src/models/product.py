@@ -7,9 +7,11 @@ class Product:
 
 
     def __add__(self, other):
-        """Сложение товаров по общей стоимости (цена * количество)"""
+        """Сложение с проверкой типов"""
         if not isinstance(other, Product):
             raise TypeError("Можно складывать только объекты Product")
+        if type(self) != type(other):
+            raise TypeError("Нельзя складывать товары разных классов")
         return (self.price * self.quantity) + (other.price * other.quantity)
 
 

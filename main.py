@@ -1,18 +1,25 @@
-from src.models.product import Product
 from src.models.category import Category
+from src.models.products.lawn_grass import LawnGrass
+from src.models.products.smartphone import Smartphone
+
 
 if __name__ == "__main__":
-    # Создаем товары
-    p1 = Product("iPhone", "128GB", 80000, 10)
-    p2 = Product("Galaxy", "256GB", 70000, 5)
+    # Создаем продукты разных типов
+    phone = Smartphone("iPhone", "Cool", 100000, 5, "A15", "13", 128, "black")
+    grass = LawnGrass("Grass", "Green", 500, 10, "Russia", "2 weeks", "green")
 
-    # Демонстрация сложения
-    print(f"Общая стоимость: {p1 + p2} руб.")  # 80000*10 + 70000*5
+    # Пытаемся сложить разные типы
+    try:
+        total = phone + grass  # Вызовет TypeError
+    except TypeError as e:
+        print(f"Ошибка: {e}")
 
-    # Создаем категорию
-    category = Category("Смартфоны", "Флагманы", [p1, p2])
+    # Работа с категорией
+    category = Category("Electronics", "Devices", [])
+    category.add_product(phone)
 
-    # Демонстрация итератора
-    print("\nТовары в категории:")
-    for product in category:
-        print(product)
+    # Пытаемся добавить не продукт
+    try:
+        category.add_product("Not a product")  # Вызовет TypeError
+    except TypeError as e:
+        print(f"Ошибка: {e}")

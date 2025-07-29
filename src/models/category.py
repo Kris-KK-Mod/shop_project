@@ -1,3 +1,6 @@
+from src.models.product import Product
+
+
 class Category:
     """Класс для представления категории товаров."""
 
@@ -41,10 +44,8 @@ class Category:
 
 
     def add_product(self, product):
-        """
-        Добавляет товар в категорию.
-
-        :param product: Объект класса Product
-        """
+        """Добавление продукта с проверкой типа"""
+        if not isinstance(product, Product):
+            raise TypeError("Можно добавлять только объекты Product или его наследников")
         self.__products.append(product)
         Category.product_count += 1
