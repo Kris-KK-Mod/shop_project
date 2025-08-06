@@ -1,6 +1,66 @@
-import pytest
+from abc import ABC, ABCMeta
 from unittest.mock import patch
-from src.models.product import Product
+
+import pytest
+
+from src.models.product import BaseProduct, Product
+
+
+def test_log_mixin_output(capsys):
+    """Проверка вывода информации при создании продукта"""
+    p = Product("Test", "Test product", 100, 5)
+    captured = capsys.readouterr()
+    assert "price=100" in captured.out  # Теперь цена будет правильной
+
+
+def test_log_mixin(capsys):
+    """Проверка работы миксина логирования."""
+    Product("Test", "Test", 100, 1)
+    captured = capsys.readouterr()
+    assert "price=100" in captured.out  # Теперь цена будет правильной
+
+
+def test_base_product_abstract_methods():
+    """Проверка, что BaseProduct требует реализации абстрактных методов"""
+    with pytest.raises(TypeError):
+
+        class InvalidProduct(BaseProduct, metaclass=ABCMeta):
+            pass
+
+        InvalidProduct("Test", "Test", 100, 1)
+
+
+def test_product_repr():
+    """Проверка строкового представления продукта"""
+    p = Product("Test", "Test", 100, 1)
+    assert repr(p) == "Product(name='Test', description='Test', quantity=1, price=100)"
+
+
+def test_repr_method():
+    """Проверка __repr__ для Product."""
+    p = Product("Test", "Test", 100, 1)
+    repr_str = repr(p)
+    assert repr_str.startswith("Product(")
+    assert "name='Test'" in repr_str
+    assert "description='Test'" in repr_str
+    assert "price=100" in repr_str
+    assert "quantity=1" in repr_str
+
+
+def test_base_product_is_abstract():
+    """Проверка, что нельзя создать экземпляр BaseProduct."""
+    with pytest.raises(TypeError):
+        BaseProduct("Test", "Test", 100, 1)
+
+
+def test_base_product_is_abc():
+    """Проверка, что BaseProduct является абстрактным классом."""
+    assert issubclass(BaseProduct, ABC)
+
+
+def test_product_implements_base_product():
+    """Проверка, что Product реализует BaseProduct."""
+    assert issubclass(Product, BaseProduct)
 
 
 def test_price_getter():
@@ -27,7 +87,7 @@ def test_zero_price_setter(capsys):
     assert product.price == 15000
 
 
-@patch('builtins.input', return_value='n')
+@patch("builtins.input", return_value="n")
 def test_price_decrease_rejected(mock_input, capsys):
     """Проверка отмены понижения цены."""
     product = Product("Телефон", "Смартфон", 15000, 5)
@@ -41,7 +101,7 @@ def test_price_decrease_rejected(mock_input, capsys):
     assert product.price == 15000
 
 
-@patch('builtins.input', return_value='y')
+@patch("builtins.input", return_value="y")
 def test_price_decrease_accepted(mock_input, capsys):
     """Проверка подтверждения понижения цены."""
     product = Product("Телефон", "Смартфон", 15000, 5)
@@ -70,7 +130,7 @@ def test_product_str():
 def test_product_add():
     p1 = Product("Товар1", "Описание", 100, 2)
     p2 = Product("Товар2", "Описание", 200, 3)
-    assert p1 + p2 == 100*2 + 200*3
+    assert p1 + p2 == 100 * 2 + 200 * 3
 
 
 def test_product_add_invalid_type():

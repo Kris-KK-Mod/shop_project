@@ -1,4 +1,5 @@
 import pytest
+
 from src.models.products.smartphone import Smartphone
 
 
@@ -12,7 +13,7 @@ def test_smartphone_creation():
 def test_smartphone_add():
     p1 = Smartphone("Phone1", "Desc", 1000, 2, "A", "M1", 64, "red")
     p2 = Smartphone("Phone2", "Desc", 2000, 3, "B", "M2", 128, "blue")
-    assert p1 + p2 == 1000*2 + 2000*3
+    assert p1 + p2 == 1000 * 2 + 2000 * 3
 
 
 def test_smartphone_add_invalid():

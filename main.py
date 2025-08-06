@@ -2,7 +2,6 @@ from src.models.category import Category
 from src.models.products.lawn_grass import LawnGrass
 from src.models.products.smartphone import Smartphone
 
-
 if __name__ == "__main__":
     # Создаем продукты разных типов
     phone = Smartphone("iPhone", "Cool", 100000, 5, "A15", "13", 128, "black")

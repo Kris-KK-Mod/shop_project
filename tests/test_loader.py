@@ -1,5 +1,7 @@
-import pytest
 import json
+
+import pytest
+
 from src.utils.loader import load_data_from_json
 
 
@@ -19,10 +21,11 @@ def test_invalid_json(tmp_path):
 
 
 def test_missing_fields(tmp_path):
-    """Проверяет обработку отсутствующих обязательных полей """
+    """Проверяет обработку отсутствующих обязательных полей"""
     file_path = tmp_path / "missing_fields.json"
-    with open(file_path, 'w', encoding='utf-8') as f:
-        json.dump({"categories": [{"name": "Test"}]}, f)  # Нет description и products
+    with open(file_path, "w", encoding="utf-8") as f:
+        # Нет description и products
+        json.dump({"categories": [{"name": "Test"}]}, f)
 
     categories = load_data_from_json(str(file_path))
     assert len(categories) == 0  # Должен вернуть пустой список
